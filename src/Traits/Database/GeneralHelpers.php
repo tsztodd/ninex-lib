@@ -11,21 +11,40 @@ use Illuminate\Support\Arr;
 trait GeneralHelpers
 {
     /**
-     * 获取当前模型
+     * 模型类名（子类应该定义此属性）
+     */
+    protected ?string $modelClass = null;
+
+    /**
+     * 获取当前模型类名
      *
      * @return string
      */
     public function setModel(): string
     {
+        // 如果子类定义了 modelClass，直接使用
+        if ($this->modelClass && class_exists($this->modelClass)) {
+            return $this->modelClass;
+        }
+
+        // 否则尝试自动推断
         $classNameArr = explode('\\', get_class($this));
         $modelName = substr(Arr::last($classNameArr), 0, -7);
 
-        $modelClass = 'App\Models\\' . $modelName;
-        if (!class_exists($modelClass)) {
-            throw $this->createException('Model不存在：' . $modelClass);
+        // 尝试多个命名空间
+        $namespaces = [
+            'App\\Models\\',
+            'App\\',
+        ];
+
+        foreach ($namespaces as $namespace) {
+            $modelClass = $namespace . $modelName;
+            if (class_exists($modelClass)) {
+                return $modelClass;
+            }
         }
 
-        return $modelClass;
+        throw $this->createException('Model不存在，请在 Service 中定义 $modelClass 属性');
     }
 
     /**

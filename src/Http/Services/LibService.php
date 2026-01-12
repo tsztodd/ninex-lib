@@ -33,6 +33,11 @@ abstract class LibService
     protected bool $enableLog = true;
 
     /**
+     * 认证 Guard
+     */
+    protected string $authGuard = 'api';
+
+    /**
      * 魔术方法：获取当前用户
      */
     public function __get($name)
@@ -48,7 +53,7 @@ abstract class LibService
      */
     public function user($force = false)
     {
-        $user = Auth::guard('api')->user();
+        $user = Auth::guard($this->authGuard)->user();
 
         if ($force && !$user) {
             throw $this->createException('未登录', 401);

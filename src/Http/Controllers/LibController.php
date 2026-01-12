@@ -44,22 +44,6 @@ abstract class LibController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->setupCors();
-    }
-
-    /**
-     * 设置跨域
-     */
-    protected function setupCors(): void
-    {
-        if (config('app.env') === 'production') {
-            return;
-        }
-
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Credentials: true');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH');
-        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Authorization');
     }
 
     /**

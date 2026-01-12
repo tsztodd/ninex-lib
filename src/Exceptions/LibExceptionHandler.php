@@ -44,10 +44,11 @@ class LibExceptionHandler extends ExceptionHandler
     /**
      * 处理 API 异常
      *
+     * @param \Illuminate\Http\Request $request
      * @param Throwable $e
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function handleApiException(Throwable $e)
+    protected function handleApiException($request, Throwable $e)
     {
         $error = $this->convertExceptionToArray($e);
 

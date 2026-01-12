@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 abstract class LibModel extends Model
 {
-    protected $guarded = ['*'];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',

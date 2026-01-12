@@ -77,7 +77,7 @@ trait ResponseTrait
      * @param mixed|null $data 额外数据
      */
     protected function error(
-        string $message = null,
+        ?string $message = null,
         ErrorCode|int $code = ErrorCode::SYSTEM,
         int $statusCode = 200,
         mixed $data = null

@@ -283,9 +283,9 @@ trait WithDbTransaction
         }
 
         if (is_numeric($value)) {
-            return $value;
+            return (string) $value;
         }
 
-        return "'" . addslashes($value) . "'";
+        return DB::getPdo()->quote($value);
     }
 }

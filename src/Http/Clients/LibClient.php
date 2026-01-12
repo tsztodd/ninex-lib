@@ -3,6 +3,7 @@
 namespace Ninex\Lib\Http\Clients;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Arr;
 use Ninex\Lib\Exceptions\ServiceException;
@@ -12,7 +13,7 @@ abstract class LibClient
     /**
      * HTTP 客户端实例
      */
-    protected Client $client;
+    protected ClientInterface $client;
 
     /**
      * 基础配置
@@ -36,16 +37,16 @@ abstract class LibClient
     /**
      * 构造函数
      */
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], ?ClientInterface $client = null)
     {
         $this->config = array_merge($this->config, $config);
-        $this->initClient();
+        $this->client = $client ?? new Client($this->config);
     }
 
     /**
-     * 初始化客户端
+     * 初始化客户端（用于重新配置后刷新）
      */
-    protected function initClient(): void
+    protected function refreshClient(): void
     {
         $this->client = new Client($this->config);
     }
@@ -180,7 +181,7 @@ abstract class LibClient
     protected function setConfig(array $config): self
     {
         $this->config = array_merge($this->config, $config);
-        $this->initClient();
+        $this->refreshClient();
         return $this;
     }
 }
